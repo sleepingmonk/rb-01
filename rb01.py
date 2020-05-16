@@ -46,6 +46,8 @@ class MyController(Controller):
 
       GPIO.cleanup()
 
+      print("GPIO Cleaned up. Ready to exit. (Ctrl-c)")
+
 print("Listening...")
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
