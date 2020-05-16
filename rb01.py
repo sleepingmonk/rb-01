@@ -32,11 +32,11 @@ class MyController(Controller):
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
 
-    def on_triangle_press(self):
-      pl.ChangeDutyCycle(70)
-      pr.ChangeDutyCycle(70)
+    def on_square_press(self):
+      pl.ChangeDutyCycle(100)
+      pr.ChangeDutyCycle(100)
 
-    def on_triangle_release(self):
+    def on_square_release(self):
       pl.ChangeDutyCycle(0)
       pr.ChangeDutyCycle(0)
 
@@ -46,7 +46,7 @@ class MyController(Controller):
 
       GPIO.cleanup()
 
-      print("GPIO Cleaned up. Ready to exit. (Ctrl-c)")
+      print("\n\n\n************ GPIO Cleaned up. Ready to exit. (Ctrl-c) ***************\n\n\n")
 
 print("Listening...")
 
