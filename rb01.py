@@ -21,6 +21,8 @@ pr = GPIO.PWM(40, 50)
 pl.start(0)
 pr.start(0)
 
+lim = 0.9
+
 class MyController(Controller):
 
     def __init__(self, **kwargs):
@@ -32,12 +34,12 @@ class MyController(Controller):
       GPIO.output(38, 0)
       GPIO.output(35, 1)
       GPIO.output(37, 0)
-      pl.ChangeDutyCycle(100)
-      pr.ChangeDutyCycle(100)
+      pl.ChangeDutyCycle(100 * lim)
+      pr.ChangeDutyCycle(100 * lim)
 
     def on_circle_release(self):
-      pl.ChangeDutyCycle(50)
-      pr.ChangeDutyCycle(50)
+      pl.ChangeDutyCycle(50 * lim)
+      pr.ChangeDutyCycle(50 * lim)
       time.sleep(0.5)
       pl.ChangeDutyCycle(0)
       pr.ChangeDutyCycle(0)
@@ -48,15 +50,15 @@ class MyController(Controller):
       GPIO.output(38, 1)
       GPIO.output(35, 0)
       GPIO.output(37, 1)
-      pl.ChangeDutyCycle(100)
-      pr.ChangeDutyCycle(100)
+      pl.ChangeDutyCycle(100 * lim)
+      pr.ChangeDutyCycle(100 * lim)
 
     def on_square_release(self):
-      pl.ChangeDutyCycle(50)
-      pr.ChangeDutyCycle(50)
+      pl.ChangeDutyCycle(50 * lim)
+      pr.ChangeDutyCycle(50 * lim)
       time.sleep(0.5)
-      pl.ChangeDutyCycle(0)
-      pr.ChangeDutyCycle(0)
+      pl.ChangeDutyCycle(0 * lim)
+      pr.ChangeDutyCycle(0 * lim)
 
 
     def on_L1_press(self):
