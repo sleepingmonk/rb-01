@@ -1,4 +1,4 @@
-from pyPS4Controller.controller import Controller
+from pyPS4Controller.controller import Controller Event
 import RPi.GPIO as GPIO
 import time
 
@@ -100,7 +100,7 @@ class MyController(Controller):
 
 print("Listening...")
 
-controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
+controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False, event_definition=MyEventDefinition)
 controller.debug = True
 # you can start listening before controller is paired, as long as you pair it within the timeout window
 controller.listen(timeout=60)
