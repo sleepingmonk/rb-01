@@ -21,7 +21,7 @@ pr = GPIO.PWM(40, 50)
 pl.start(0)
 pr.start(0)
 
-lim = 0.9
+lim = 0.88
 
 class MyController(Controller):
 
