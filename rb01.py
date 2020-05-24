@@ -79,6 +79,8 @@ class MyController(Controller):
 
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
+        self.bearing_left = 0
+        self.bearing_right = 0
 
     def on_triangle_press(self):
         #forward
@@ -112,14 +114,39 @@ class MyController(Controller):
         pl.ChangeDutyCycle(0 * lim)
         pr.ChangeDutyCycle(0 * lim)
 
-    def on_L1_press(self):
+    def on_L3_up(self, value):
+        GPIO.output(36, 1)
+        GPIO.output(38, 0)
+        GPIO.output(35, 1)
+        GPIO.output(37, 0)
+        value = (value * -1, value)[value < 0]
+        pl.ChangeDutyCycle(((value - self.bearing_left)/33000 * 100) * lim)
+        pr.ChangeDutyCycle(((value - self.bearing_right)/33000 * 100) * lim)
+
+    def on_L3_down(self, value):
+        GPIO.output(36, 0)
+        GPIO.output(38, 1)
+        GPIO.output(35, 0)
+        GPIO.output(37, 1)
+        (value * -1, value)[value < 0]
+        pl.ChangeDutyCycle(((value - self.bearing_left)/33000 * 100) * lim)
+        pr.ChangeDutyCycle(((value - self.bearing_right)/33000 * 100) * lim)
+
+    def on_L3_left(self, value):
+        self.bearing_left = (value * -1, value)[value < 0]
+        self.bearing_right = 0
+
+    def on_L3_right(self, value):
+        self.bearing_left = 0
+        self.bearing_right = (value * -1, value)[value < 0]
+
+    def on_paystation_button_press(self):
         pl.stop()
         pr.stop()
 
         GPIO.cleanup()
 
-        print("\n\n\n************ GPIO Cleaned up. Ready to exit. (Ctrl-c)",
-              "***************\n\n\n")
+        print("\n\n\n************ GPIO Cleaned up. Ready to exit. (Ctrl-c)***************\n\n\n")
 
 print("Listening...")
 
