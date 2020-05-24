@@ -1,4 +1,4 @@
-from pyPS4Controller.controller import Controller Event
+from pyPS4Controller.controller import Controller, Event
 import RPi.GPIO as GPIO
 import time
 
@@ -23,6 +23,7 @@ pr.start(0)
 
 lim = 0.88
 
+
 class MyEventDefinition(Event):
 
     def __init__(self, **kwargs):
@@ -34,23 +35,45 @@ class MyEventDefinition(Event):
     # - self.value
     # use those variables to determine which button is being pressed
     def x_pressed(self):
-        return self.button_id == 0 and self.button_type == 1 and self.value == 1
+        return self.button_id == 0 \
+            and self.button_type == 1\
+            and self.value == 1
 
     def x_released(self):
-        return self.button_id == 0 and self.button_type == 1 and self.value == 0
+        return self.button_id == 0 \
+            and self.button_type == 1 \
+            and self.value == 0
+
     def circle_pressed(self):
-        return self.button_id == 1 and self.button_type == 1 and self.value == 1
+        return self.button_id == 1 \
+            and self.button_type == 1 \
+            and self.value == 1
+
     def circle_released(self):
-        return self.button_id == 1 and self.button_type == 1 and self.value == 0
+        return self.button_id == 1 \
+            and self.button_type == 1 \
+            and self.value == 0
+
     def triangle_pressed(self):
-        return self.button_id == 2 and self.button_type == 1 and self.value == 1
+        return self.button_id == 2 \
+            and self.button_type == 1 \
+            and self.value == 1
 
     def triangle_released(self):
-        return self.button_id == 2 and self.button_type == 1 and self.value == 0
+        return self.button_id == 2 \
+            and self.button_type == 1 \
+            and self.value == 0
+
     def square_pressed(self):
-        return self.button_id == 3 and self.button_type == 1 and self.value == 1
+        return self.button_id == 3 \
+            and self.button_type == 1 \
+            and self.value == 1
+
     def square_released(self):
-        return self.button_id == 3 and self.button_type == 1 and self.value == 0
+        return self.button_id == 3 \
+            and self.button_type == 1 \
+            and self.value == 0
+
 
 class MyController(Controller):
 
@@ -58,51 +81,55 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_triangle_press(self):
-      #forward
-      GPIO.output(36, 1)
-      GPIO.output(38, 0)
-      GPIO.output(35, 1)
-      GPIO.output(37, 0)
-      pl.ChangeDutyCycle(100 * lim)
-      pr.ChangeDutyCycle(100 * lim)
+        #forward
+        GPIO.output(36, 1)
+        GPIO.output(38, 0)
+        GPIO.output(35, 1)
+        GPIO.output(37, 0)
+        pl.ChangeDutyCycle(100 * lim)
+        pr.ChangeDutyCycle(100 * lim)
 
     def on_triangle_release(self):
-      pl.ChangeDutyCycle(50 * lim)
-      pr.ChangeDutyCycle(50 * lim)
-      time.sleep(0.5)
-      pl.ChangeDutyCycle(0)
-      pr.ChangeDutyCycle(0)
+        pl.ChangeDutyCycle(50 * lim)
+        pr.ChangeDutyCycle(50 * lim)
+        time.sleep(0.5)
+        pl.ChangeDutyCycle(0)
+        pr.ChangeDutyCycle(0)
 
     def on_x_press(self):
-      #forward
-      GPIO.output(36, 0)
-      GPIO.output(38, 1)
-      GPIO.output(35, 0)
-      GPIO.output(37, 1)
-      pl.ChangeDutyCycle(100 * lim)
-      pr.ChangeDutyCycle(100 * lim)
+        #forward
+        GPIO.output(36, 0)
+        GPIO.output(38, 1)
+        GPIO.output(35, 0)
+        GPIO.output(37, 1)
+        pl.ChangeDutyCycle(100 * lim)
+        pr.ChangeDutyCycle(100 * lim)
 
     def on_x_release(self):
-      pl.ChangeDutyCycle(50 * lim)
-      pr.ChangeDutyCycle(50 * lim)
-      time.sleep(0.5)
-      pl.ChangeDutyCycle(0 * lim)
-      pr.ChangeDutyCycle(0 * lim)
-
+        pl.ChangeDutyCycle(50 * lim)
+        pr.ChangeDutyCycle(50 * lim)
+        time.sleep(0.5)
+        pl.ChangeDutyCycle(0 * lim)
+        pr.ChangeDutyCycle(0 * lim)
 
     def on_L1_press(self):
-      pl.stop()
-      pr.stop()
+        pl.stop()
+        pr.stop()
 
-      GPIO.cleanup()
+        GPIO.cleanup()
 
-      print("\n\n\n************ GPIO Cleaned up. Ready to exit. (Ctrl-c) ***************\n\n\n")
+        print("\n\n\n************ GPIO Cleaned up. Ready to exit. (Ctrl-c)",
+              "***************\n\n\n")
 
 print("Listening...")
 
-controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False, event_definition=MyEventDefinition)
+controller = MyController(interface="/dev/input/js0",
+                          connecting_using_ds4drv=False,
+                          event_definition=MyEventDefinition)
+
 controller.debug = True
-# you can start listening before controller is paired, as long as you pair it within the timeout window
+# you can start listening before controller is paired, as long as you pair it
+# within the timeout window
 controller.listen(timeout=60)
 
 
@@ -113,4 +140,3 @@ controller.listen(timeout=60)
 # pl.ChangeDutyCycle(100)
 # pr.ChangeDutyCycle(100)
 # time.sleep(10)
-
