@@ -23,12 +23,41 @@ pr.start(0)
 
 lim = 0.88
 
+class MyEventDefinition(Event):
+
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+
+    # each overloaded function, has access to:
+    # - self.button_id
+    # - self.button_type
+    # - self.value
+    # use those variables to determine which button is being pressed
+    def x_pressed(self):
+        return self.button_id == 0 and self.button_type == 1 and self.value == 1
+
+    def x_released(self):
+        return self.button_id == 0 and self.button_type == 1 and self.value == 0
+    def circle_pressed(self):
+        return self.button_id == 1 and self.button_type == 1 and self.value == 1
+    def circle_released(self):
+        return self.button_id == 1 and self.button_type == 1 and self.value == 0
+    def triangle_pressed(self):
+        return self.button_id == 2 and self.button_type == 1 and self.value == 1
+
+    def triangle_released(self):
+        return self.button_id == 2 and self.button_type == 1 and self.value == 0
+    def square_pressed(self):
+        return self.button_id == 3 and self.button_type == 1 and self.value == 1
+    def square_released(self):
+        return self.button_id == 3 and self.button_type == 1 and self.value == 0
+
 class MyController(Controller):
 
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
 
-    def on_circle_press(self):
+    def on_triangle_press(self):
       #forward
       GPIO.output(36, 1)
       GPIO.output(38, 0)
@@ -37,14 +66,14 @@ class MyController(Controller):
       pl.ChangeDutyCycle(100 * lim)
       pr.ChangeDutyCycle(100 * lim)
 
-    def on_circle_release(self):
+    def on_triangle_release(self):
       pl.ChangeDutyCycle(50 * lim)
       pr.ChangeDutyCycle(50 * lim)
       time.sleep(0.5)
       pl.ChangeDutyCycle(0)
       pr.ChangeDutyCycle(0)
 
-    def on_square_press(self):
+    def on_x_press(self):
       #forward
       GPIO.output(36, 0)
       GPIO.output(38, 1)
@@ -53,7 +82,7 @@ class MyController(Controller):
       pl.ChangeDutyCycle(100 * lim)
       pr.ChangeDutyCycle(100 * lim)
 
-    def on_square_release(self):
+    def on_x_release(self):
       pl.ChangeDutyCycle(50 * lim)
       pr.ChangeDutyCycle(50 * lim)
       time.sleep(0.5)
