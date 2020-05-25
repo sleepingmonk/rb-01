@@ -118,6 +118,7 @@ class MyController(Controller):
             + self.limitMin
         dutyl = drive - self.bearingl if drive - self.bearingl > 0 else 0
         dutyr = drive - self.bearingr if drive - self.bearingr > 0 else 0
+        print("\n\nup: ", value)
         print("drive: ", drive)
         print("left: ", self.bearingl)
         print("right: ", self.bearingr)
@@ -136,6 +137,7 @@ class MyController(Controller):
             + self.limitMin
         dutyl = drive - self.bearingl if drive - self.bearingl > 0 else 0
         dutyr = drive - self.bearingr if drive - self.bearingr > 0 else 0
+        print("\n\ndown: ", value)
         print("drive: ", drive)
         print("left: ", self.bearingl)
         print("right: ", self.bearingr)
@@ -149,12 +151,18 @@ class MyController(Controller):
             * (self.limitMax - self.limitMin) \
             + self.limitMin
         self.bearingr = 0
+        print("\n\nleft: ", value)
+        print("bearingl: ", self.bearingl)
+        print("bearingr: ", self.bearingr)
 
     def on_L3_right(self, value):
         self.bearingl = 0
         self.bearingr = (abs(value) / self.maxStick) \
             * (self.limitMax - self.limitMin) \
             + self.limitMin
+        print("\n\nright: ", value)
+        print("bearingl: ", self.bearingl)
+        print("bearingr: ", self.bearingr)
 
     def on_playstation_button_press(self):
         pl.stop()
