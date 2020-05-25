@@ -80,6 +80,10 @@ class MyController(Controller):
         self.bearingr = 0
         self.maxStick = 33000
         self.limiter = .88
+        self.maxUp = 0
+        self.maxDown = 0
+        self.maxLeft = 0
+        self.maxRight = 0
 
     def on_triangle_press(self):
         #forward
@@ -121,13 +125,16 @@ class MyController(Controller):
         drive = abs(value / self.maxStick)
         dutyl = drive * self.bearingl * self.limiter * 100
         dutyr = drive * self.bearingr * self.limiter * 100
-        print("drive: ", drive)
-        print("left: ", self.bearingl)
-        print("right: ", self.bearingr)
-        print("dutyl: ", dutyl)
-        print("dutylr: ", dutyr)
+        # print("drive: ", drive)
+        # print("left: ", self.bearingl)
+        # print("right: ", self.bearingr)
+        # print("dutyl: ", dutyl)
+        # print("dutylr: ", dutyr)
         pl.ChangeDutyCycle(dutyl)
         pr.ChangeDutyCycle(dutyr)
+
+        self.maxUp = value if value < self.maxUp else self.maxUp
+        print("maxUp: ", self.maxUp)
 
     def on_L3_down(self, value):
         GPIO.output(36, 0)
@@ -137,21 +144,30 @@ class MyController(Controller):
         drive = abs(value / self.maxStick)
         dutyl = drive * self.bearingl * self.limiter * 100
         dutyr = drive * self.bearingr * self.limiter * 100
-        print("drive: ", drive)
-        print("left: ", self.bearingl)
-        print("right: ", self.bearingr)
-        print("dutyl: ", dutyl)
-        print("dutylr: ", dutyr)
+        # print("drive: ", drive)
+        # print("left: ", self.bearingl)
+        # print("right: ", self.bearingr)
+        # print("dutyl: ", dutyl)
+        # print("dutylr: ", dutyr)
         pl.ChangeDutyCycle(dutyl)
         pr.ChangeDutyCycle(dutyr)
 
+        self.maxDown = value if value < self.maxDown else self.maxDown
+        print("maxDown: ", self.maxDown)
+
     def on_L3_left(self, value):
-        self.bearingl = abs(value / self.maxStick)
+        self.bearingl = abs(value) / self.maxStick
         self.bearingr = 1
+
+        self.maxLeft = value if value < self.maxLeft else self.maxLeft
+        print("maxLeft: ", self.maxLeft)
 
     def on_L3_right(self, value):
         self.bearingl = 1
-        self.bearingr = abs(value / self.maxStick)
+        self.bearingr = abs(value) / self.maxStick
+
+        self.maxRight = value if value < self.maxRight else self.maxRight
+        print("maxRight: ", self.maxRight)
 
     def on_playstation_button_press(self):
         pl.stop()
