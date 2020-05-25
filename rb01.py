@@ -79,7 +79,8 @@ class MyController(Controller):
         self.bearingl = 0
         self.bearingr = 0
         self.maxStick = 32767
-        self.limiter = .88
+        self.limitMax = 88
+        self.limitMin = 50
 
     def on_triangle_press(self):
         #forward
@@ -118,14 +119,16 @@ class MyController(Controller):
         GPIO.output(38, 0)
         GPIO.output(35, 1)
         GPIO.output(37, 0)
-        drive = abs(value) / self.maxStick
-        dutyl = (drive - self.bearingl) * self.limiter * 100
-        dutyr = (drive - self.bearingr) * self.limiter * 100
-        # print("drive: ", drive)
-        # print("left: ", self.bearingl)
-        # print("right: ", self.bearingr)
-        # print("dutyl: ", dutyl)
-        # print("dutylr: ", dutyr)
+        drive = (abs(value) / self.maxStick) \
+            * (self.limitMax - self.limitMin) \
+            + self.limitMin
+        dutyl = drive - self.bearingl
+        dutyr = drive - self.bearingr
+        print("drive: ", drive)
+        print("left: ", self.bearingl)
+        print("right: ", self.bearingr)
+        print("dutyl: ", dutyl)
+        print("dutylr: ", dutyr)
         pl.ChangeDutyCycle(dutyl)
         pr.ChangeDutyCycle(dutyr)
 
@@ -134,24 +137,30 @@ class MyController(Controller):
         GPIO.output(38, 1)
         GPIO.output(35, 0)
         GPIO.output(37, 1)
-        drive = abs(value) / self.maxStick
-        dutyl = (drive - self.bearingl) * self.limiter * 100
-        dutyr = (drive - self.bearingr) * self.limiter * 100
-        # print("drive: ", drive)
-        # print("left: ", self.bearingl)
-        # print("right: ", self.bearingr)
-        # print("dutyl: ", dutyl)
-        # print("dutylr: ", dutyr)
+        drive = (abs(value) / self.maxStick) \
+            * (self.limitMax - self.limitMin) \
+            + self.limitMin
+        dutyl = drive - self.bearingl
+        dutyr = drive - self.bearingr
+        print("drive: ", drive)
+        print("left: ", self.bearingl)
+        print("right: ", self.bearingr)
+        print("dutyl: ", dutyl)
+        print("dutylr: ", dutyr)
         pl.ChangeDutyCycle(dutyl)
         pr.ChangeDutyCycle(dutyr)
 
     def on_L3_left(self, value):
-        self.bearingl = abs(value) / self.maxStick
+        self.bearingl = (abs(value) / self.maxStick) \
+            * (self.limitMax - self.limitMin) \
+            + self.limitMin
         self.bearingr = 0
 
     def on_L3_right(self, value):
         self.bearingl = 0
-        self.bearingr = abs(value) / self.maxStick
+        self.bearingr = (abs(value) / self.maxStick) \
+            * (self.limitMax - self.limitMin) \
+            + self.limitMin
 
     def on_playstation_button_press(self):
         pl.stop()
@@ -159,7 +168,8 @@ class MyController(Controller):
 
         GPIO.cleanup()
 
-        print("\n\n\n************ GPIO Cleaned up. Ready to exit. (Ctrl-c)***************\n\n\n")
+        print("\n\n\n************ GPIO Cleaned up. Ready to exit. "
+              "(Ctrl-c)***************\n\n\n")
 
         raise SystemExit
 
