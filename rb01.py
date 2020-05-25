@@ -21,9 +21,6 @@ pr = GPIO.PWM(40, 50)
 pl.start(0)
 pr.start(0)
 
-lim = 0.88
-
-
 class MyEventDefinition(Event):
 
     def __init__(self, **kwargs):
@@ -81,6 +78,8 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
         self.bearingl = 0
         self.bearingr = 0
+        self.maxStick = 33000
+        self.limiter = .88
 
     def on_triangle_press(self):
         #forward
@@ -119,10 +118,10 @@ class MyController(Controller):
         GPIO.output(38, 0)
         GPIO.output(35, 1)
         GPIO.output(37, 0)
-        value = abs(value)
-        dutyl = ((value - self.bearingl)/33000 * 100) * lim
-        dutyr = ((value - self.bearingr)/33000 * 100) * lim
-        print("up: ", value)
+        drive = abs(value / self.maxStick)
+        dutyl = drive * self.bearingl * self.limiter * 100
+        dutyr = drive * self.bearingr * self.limiter * 100
+        print("drive: ", drive)
         print("left: ", self.bearingl)
         print("right: ", self.bearingr)
         print("dutyl: ", dutyl)
@@ -135,9 +134,10 @@ class MyController(Controller):
         GPIO.output(38, 1)
         GPIO.output(35, 0)
         GPIO.output(37, 1)
-        dutyl = ((value - self.bearingl)/33000 * 100) * lim
-        dutyr = ((value - self.bearingr)/33000 * 100) * lim
-        print("down: ", value)
+        drive = abs(value / self.maxStick)
+        dutyl = drive * self.bearingl * self.limiter * 100
+        dutyr = drive * self.bearingr * self.limiter * 100
+        print("drive: ", drive)
         print("left: ", self.bearingl)
         print("right: ", self.bearingr)
         print("dutyl: ", dutyl)
@@ -146,12 +146,12 @@ class MyController(Controller):
         pr.ChangeDutyCycle(dutyr)
 
     def on_L3_left(self, value):
-        self.bearingl = abs(value)
-        self.bearingr = 0
+        self.bearingl = abs(value / self.maxStick)
+        self.bearingr = 1
 
     def on_L3_right(self, value):
-        self.bearingl = 0
-        self.bearingr = abs(value)
+        self.bearingl = 1
+        self.bearingr = abs(value / self.maxStick)
 
     def on_playstation_button_press(self):
         pl.stop()
