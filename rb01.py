@@ -151,7 +151,7 @@ class MyController(Controller):
 
     def on_L3_right(self, value):
         self.bearingl = 0
-        self.bearingr = (value * -1, value)[value < 0]
+        self.bearingr = abs(value)
 
     def on_playstation_button_press(self):
         pl.stop()
