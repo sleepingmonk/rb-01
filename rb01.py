@@ -88,13 +88,10 @@ class MyController(Controller):
         GPIO.output(38, 0)
         GPIO.output(35, 1)
         GPIO.output(37, 0)
-        pl.ChangeDutyCycle(100 * self.limiter)
-        pr.ChangeDutyCycle(100 * self.limiter)
+        pl.ChangeDutyCycle(100 * self.limitMax)
+        pr.ChangeDutyCycle(100 * self.limitMax)
 
     def on_triangle_release(self):
-        pl.ChangeDutyCycle(50 * self.limiter)
-        pr.ChangeDutyCycle(50 * self.limiter)
-        time.sleep(0.5)
         pl.ChangeDutyCycle(0)
         pr.ChangeDutyCycle(0)
 
@@ -104,15 +101,12 @@ class MyController(Controller):
         GPIO.output(38, 1)
         GPIO.output(35, 0)
         GPIO.output(37, 1)
-        pl.ChangeDutyCycle(100 * self.limiter)
-        pr.ChangeDutyCycle(100 * self.limiter)
+        pl.ChangeDutyCycle(100 * self.limitMax)
+        pr.ChangeDutyCycle(100 * self.limitMax)
 
     def on_x_release(self):
-        pl.ChangeDutyCycle(50 * self.limiter)
-        pr.ChangeDutyCycle(50 * self.limiter)
-        time.sleep(0.5)
-        pl.ChangeDutyCycle(0 * self.limiter)
-        pr.ChangeDutyCycle(0 * self.limiter)
+        pl.ChangeDutyCycle(0)
+        pr.ChangeDutyCycle(0)
 
     def on_L3_up(self, value):
         GPIO.output(36, 1)
@@ -122,8 +116,8 @@ class MyController(Controller):
         drive = (abs(value) / self.maxStick) \
             * (self.limitMax - self.limitMin) \
             + self.limitMin
-        dutyl = drive - self.bearingl
-        dutyr = drive - self.bearingr
+        dutyl = drive - self.bearingl if drive - self.bearingl > 0 else 0
+        dutyr = drive - self.bearingr if drive - self.bearingr > 0 else 0
         print("drive: ", drive)
         print("left: ", self.bearingl)
         print("right: ", self.bearingr)
@@ -140,8 +134,8 @@ class MyController(Controller):
         drive = (abs(value) / self.maxStick) \
             * (self.limitMax - self.limitMin) \
             + self.limitMin
-        dutyl = drive - self.bearingl
-        dutyr = drive - self.bearingr
+        dutyl = drive - self.bearingl if drive - self.bearingl > 0 else 0
+        dutyr = drive - self.bearingr if drive - self.bearingr > 0 else 0
         print("drive: ", drive)
         print("left: ", self.bearingl)
         print("right: ", self.bearingr)
