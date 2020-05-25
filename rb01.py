@@ -119,21 +119,26 @@ class MyController(Controller):
         GPIO.output(38, 0)
         GPIO.output(35, 1)
         GPIO.output(37, 0)
-        value = (value * -1, value)[value < 0]
-        pl.ChangeDutyCycle(((value - self.bearing_left)/33000 * 100) * lim)
-        pr.ChangeDutyCycle(((value - self.bearing_right)/33000 * 100) * lim)
+        value = abs(value)
+        print("up: ", value)
+        dutyl = ((value - self.bearing_left)/33000 * 100) * lim
+        dutyr = ((value - self.bearing_right)/33000 * 100) * lim
+        pl.ChangeDutyCycle(dutyl)
+        pr.ChangeDutyCycle(dutyr)
 
     def on_L3_down(self, value):
         GPIO.output(36, 0)
         GPIO.output(38, 1)
         GPIO.output(35, 0)
         GPIO.output(37, 1)
-        (value * -1, value)[value < 0]
-        pl.ChangeDutyCycle(((value - self.bearing_left)/33000 * 100) * lim)
-        pr.ChangeDutyCycle(((value - self.bearing_right)/33000 * 100) * lim)
+        print("down: ", value)
+        dutyl = ((value - self.bearing_left)/33000 * 100) * lim
+        dutyr = ((value - self.bearing_right)/33000 * 100) * lim
+        pl.ChangeDutyCycle(dutyl)
+        pr.ChangeDutyCycle(dutyr)
 
     def on_L3_left(self, value):
-        self.bearing_left = (value * -1, value)[value < 0]
+        self.bearing_left = abs(value)
         self.bearing_right = 0
 
     def on_L3_right(self, value):
@@ -148,13 +153,15 @@ class MyController(Controller):
 
         print("\n\n\n************ GPIO Cleaned up. Ready to exit. (Ctrl-c)***************\n\n\n")
 
+        raise SystemExit
+
 print("Listening...")
 
 controller = MyController(interface="/dev/input/js0",
                           connecting_using_ds4drv=False,
                           event_definition=MyEventDefinition)
 
-controller.debug = True
+# controller.debug = True
 # you can start listening before controller is paired, as long as you pair it
 # within the timeout window
 controller.listen(timeout=60)
