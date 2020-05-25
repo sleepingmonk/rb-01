@@ -79,8 +79,8 @@ class MyController(Controller):
 
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
-        self.bearing_left = 0
-        self.bearing_right = 0
+        self.bearingl = 0
+        self.bearingr = 0
 
     def on_triangle_press(self):
         #forward
@@ -120,9 +120,13 @@ class MyController(Controller):
         GPIO.output(35, 1)
         GPIO.output(37, 0)
         value = abs(value)
+        dutyl = ((value - self.bearingl)/33000 * 100) * lim
+        dutyr = ((value - self.bearingr)/33000 * 100) * lim
         print("up: ", value)
-        dutyl = ((value - self.bearing_left)/33000 * 100) * lim
-        dutyr = ((value - self.bearing_right)/33000 * 100) * lim
+        print("left: ", self.bearingl)
+        print("right: ", self.bearingr)
+        print("dutyl: ", dutyl)
+        print("dutylr: ", dutyr)
         pl.ChangeDutyCycle(dutyl)
         pr.ChangeDutyCycle(dutyr)
 
@@ -131,21 +135,25 @@ class MyController(Controller):
         GPIO.output(38, 1)
         GPIO.output(35, 0)
         GPIO.output(37, 1)
+        dutyl = ((value - self.bearingl)/33000 * 100) * lim
+        dutyr = ((value - self.bearingr)/33000 * 100) * lim
         print("down: ", value)
-        dutyl = ((value - self.bearing_left)/33000 * 100) * lim
-        dutyr = ((value - self.bearing_right)/33000 * 100) * lim
+        print("left: ", self.bearingl)
+        print("right: ", self.bearingr)
+        print("dutyl: ", dutyl)
+        print("dutylr: ", dutyr)
         pl.ChangeDutyCycle(dutyl)
         pr.ChangeDutyCycle(dutyr)
 
     def on_L3_left(self, value):
-        self.bearing_left = abs(value)
-        self.bearing_right = 0
+        self.bearingl = abs(value)
+        self.bearingr = 0
 
     def on_L3_right(self, value):
-        self.bearing_left = 0
-        self.bearing_right = (value * -1, value)[value < 0]
+        self.bearingl = 0
+        self.bearingr = (value * -1, value)[value < 0]
 
-    def on_paystation_button_press(self):
+    def on_playstation_button_press(self):
         pl.stop()
         pr.stop()
 
