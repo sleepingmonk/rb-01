@@ -113,12 +113,11 @@ class MyController(Controller):
         GPIO.output(38, 0)
         GPIO.output(35, 1)
         GPIO.output(37, 0)
-        drive = (abs(value) / self.maxStick) \
-            * (self.limitMax - self.limitMin) \
-            + self.limitMin
+        drive = ((abs(value) / self.maxStick) * (self.limitMax - self.limitMin)) + self.limitMin
         dutyl = drive - self.bearingl if drive - self.bearingl > 0 else 0
         dutyr = drive - self.bearingr if drive - self.bearingr > 0 else 0
-        print("\n\nup: ", value)
+        print('...')
+        print("up: ", abs(value))
         print("drive: ", drive)
         print("left: ", self.bearingl)
         print("right: ", self.bearingr)
@@ -132,12 +131,11 @@ class MyController(Controller):
         GPIO.output(38, 1)
         GPIO.output(35, 0)
         GPIO.output(37, 1)
-        drive = (abs(value) / self.maxStick) \
-            * (self.limitMax - self.limitMin) \
-            + self.limitMin
+        drive = ((abs(value) / self.maxStick) * (self.limitMax - self.limitMin)) + self.limitMin
         dutyl = drive - self.bearingl if drive - self.bearingl > 0 else 0
         dutyr = drive - self.bearingr if drive - self.bearingr > 0 else 0
-        print("\n\ndown: ", value)
+        print("...")
+        print("down: ", abs(value))
         print("drive: ", drive)
         print("left: ", self.bearingl)
         print("right: ", self.bearingr)
@@ -147,20 +145,22 @@ class MyController(Controller):
         pr.ChangeDutyCycle(dutyr)
 
     def on_L3_left(self, value):
-        self.bearingl = (abs(value) / self.maxStick) \
-            * (self.limitMax - self.limitMin) \
+        self.bearingl = ((abs(value) / self.maxStick)
+                         * (self.limitMax - self.limitMin)) \
             + self.limitMin
         self.bearingr = 0
-        print("\n\nleft: ", value)
+        print("...")
+        print("left: ", abs(value))
         print("bearingl: ", self.bearingl)
         print("bearingr: ", self.bearingr)
 
     def on_L3_right(self, value):
         self.bearingl = 0
-        self.bearingr = (abs(value) / self.maxStick) \
-            * (self.limitMax - self.limitMin) \
+        self.bearingr = ((abs(value) / self.maxStick)
+                         * (self.limitMax - self.limitMin)) \
             + self.limitMin
-        print("\n\nright: ", value)
+        print("...")
+        print("right: ", abs(value))
         print("bearingl: ", self.bearingl)
         print("bearingr: ", self.bearingr)
 
