@@ -88,8 +88,8 @@ class MyController(Controller):
         GPIO.output(38, 0)
         GPIO.output(35, 1)
         GPIO.output(37, 0)
-        pl.ChangeDutyCycle(100 * self.limitMax)
-        pr.ChangeDutyCycle(100 * self.limitMax)
+        pl.ChangeDutyCycle(self.limitMax)
+        pr.ChangeDutyCycle(self.limitMax)
 
     def on_triangle_release(self):
         pl.ChangeDutyCycle(0)
@@ -101,8 +101,8 @@ class MyController(Controller):
         GPIO.output(38, 1)
         GPIO.output(35, 0)
         GPIO.output(37, 1)
-        pl.ChangeDutyCycle(100 * self.limitMax)
-        pr.ChangeDutyCycle(100 * self.limitMax)
+        pl.ChangeDutyCycle(self.limitMax)
+        pr.ChangeDutyCycle(self.limitMax)
 
     def on_x_release(self):
         pl.ChangeDutyCycle(0)
